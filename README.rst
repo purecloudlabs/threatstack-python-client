@@ -2,6 +2,9 @@
 Threat Stack Python Client
 ==========================
 
+.. image:: https://travis-ci.org/MyPureCloud/threatstack-python-client.svg?branch=master
+    :target: https://travis-ci.org/MyPureCloud/threatstack-python-client
+
 A Python library for Threat Stack's REST API.
 
 Quickstart

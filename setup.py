@@ -3,7 +3,7 @@
 from setuptools import setup
 
 install_reqs = [
-    'requests',
+    'requests[security]',
     'retrying'
 ]
 
