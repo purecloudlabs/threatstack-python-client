@@ -58,6 +58,6 @@ Get a single resource::
 Documentation
 =============
 
-See full documentation and usage examples at (link here)
+See full documentation and usage examples at http://threatstack-python-client.readthedocs.io/
 
 
