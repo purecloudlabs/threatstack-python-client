@@ -83,12 +83,12 @@ class ThreatStack(object):
         # ThreatStack can return various things
         # when it fails to find a resource so trying
         # to give raise a consistent error
-        if not resp._content:
+        if not resp.json():
             return {}
 
         if resp.status_code >= 500:
-            if "status" in resp._content:
-                c = json.loads(resp._content)
+            if "status" in resp.json():
+                c = resp.json()
                 if c["status"].lower() == "error":
                     error = c["message"]
                     raise errors.ThreatStackAPIError(error)
@@ -97,5 +97,4 @@ class ThreatStack(object):
             return {}
 
         if resp.status_code <= 202:
-            #return json.loads(resp._content)
             return resp.json()
