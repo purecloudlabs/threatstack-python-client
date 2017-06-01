@@ -5,7 +5,10 @@ This module is a client for the ThreatStack API.
 import json
 from retrying import retry
 from requests import Request, Session
-from urlparse import urljoin
+try:
+    from urllib.parse import urlparse # Python 3
+except ImportError:
+     from urlparse import urlparse # Python 2
 
 import resources
 import errors
