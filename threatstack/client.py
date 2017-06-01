@@ -97,4 +97,5 @@ class ThreatStack(object):
             return {}
 
         if resp.status_code <= 202:
-            return json.loads(resp._content)
+            #return json.loads(resp._content)
+            return resp.json()
