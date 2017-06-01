@@ -49,9 +49,8 @@ def test_list_policies():
     ts = ThreatStack("test_api_key")
     response = ts.policies.list(page=1)
     assert isinstance(response, GeneratorType)
-
     count = 0
-    for agent in response:
+    for policy in response:
         count += 1
 
     assert count == 2

@@ -6,7 +6,8 @@ python:
   - 3.6
 
 install:
-  - pip install responses threatstack
+  - pip install .
+  - pip install responses
 
 script:
   - py.test
