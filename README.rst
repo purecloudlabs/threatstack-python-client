@@ -2,11 +2,18 @@
 Threat Stack Python Client
 ==========================
 
-.. image:: https://travis-ci.org/MyPureCloud/threatstack-python-client.svg?branch=master
+|Build Status| |PyPi| |Docs|
+
+
+.. |Build Status| image:: https://travis-ci.org/MyPureCloud/threatstack-python-client.svg?branch=master
     :target: https://travis-ci.org/MyPureCloud/threatstack-python-client
 
-.. image:: https://badge.fury.io/py/threatstack.svg
+.. |PyPi| image:: https://badge.fury.io/py/threatstack.svg
     :target: https://badge.fury.io/py/threatstack
+
+.. |Docs| image:: https://readthedocs.org/projects/threatstack-python-client/badge/?version=latest&style=flat
+    :target: https://threatstack-python-client.readthedocs.io/en/latest/
+    :alt: Read the docs
 
 A Python library for Threat Stack's REST API.
 
