@@ -1,5 +1,5 @@
 """
-ThreatStack Python Client Excpetions
+ThreatStack Python Client Exceptions
 """
 
 
