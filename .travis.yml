@@ -6,7 +6,7 @@ python:
   - 3.6
 
 install:
-  - pip install httpretty threatstack
+  - pip install responses threatstack
 
 script:
   - py.test

@@ -1,57 +1,56 @@
-import httpretty
-import json
-import pytest
-import requests
 from types import GeneratorType
+
+import responses
+import pytest
 
 from threatstack import ThreatStack
 
 
-@httpretty.activate
+@responses.activate
 def test_list_agents():
-    httpretty.register_uri(httpretty.GET, "https://app.threatstack.com/api/v1/agents",
-                           content_type="application/json",
-                           body='[ \
-                                    { \
-                                        "activated_at": "2014-01-31T14:36:24.359Z", \
-                                        "pause": false, \
-                                        "online": false, \
-                                        "enabled": true, \
-                                        "updated_at": "2014-01-31T01:32:54.000Z", \
-                                        "last_reported_at": "2014-02-03T22:39:28.912Z", \
-                                        "created_at": "2014-01-31T01:32:54.000Z", \
-                                        "ip_address": "189.173.23.133", \
-                                        "version": "1.0.8", \
-                                        "status": "active", \
-                                        "name": "precise64", \
-                                        "description": "", \
-                                        "hostname": "webserver-2", \
-                                        "agent_id": "524c4a59a086e11959000009-6cc8d9b0-8a17-11e3-a2e3-ffced68b988625dda8300db4f718", \
-                                        "id": "52eafd46e5777f3a26000008", \
-                                        "policy_id": "524c4b9aa086e1195900000d", \
-                                        "organization_id": "524c4a59a086e11959000002" \
-                                    }, \
-                                    { \
-                                        "activated_at": "2014-01-31T14:36:24.359Z", \
-                                        "pause": false, \
-                                        "online": true, \
-                                        "enabled": true, \
-                                        "updated_at": "2014-01-31T01:32:54.000Z", \
-                                        "last_reported_at": "2014-02-03T22:39:28.912Z", \
-                                        "created_at": "2014-01-31T01:32:54.000Z", \
-                                        "ip_address": "189.173.23.134", \
-                                        "version": "1.0.8", \
-                                        "status": "active", \
-                                        "name": "precise64", \
-                                        "description": "", \
-                                        "hostname": "webserver-2", \
-                                        "agent_id": "524c4a59a086e11959000009-6cc8d9b0-8a17-11e3-a2e3-ffced68b988625dda8300db4f719", \
-                                        "id": "52eafd46e5777f3a26000009", \
-                                        "policy_id": "524c4b9aa086e1195900000d", \
-                                        "organization_id": "524c4a59a086e11959000002" \
-                                    } \
-                                 ]'
-                          )
+    responses.add(responses.GET, "https://app.threatstack.com/api/v1/agents",
+                  content_type="application/json",
+                  body='[ \
+                            { \
+                                "activated_at": "2014-01-31T14:36:24.359Z", \
+                                "pause": false, \
+                                "online": false, \
+                                "enabled": true, \
+                                "updated_at": "2014-01-31T01:32:54.000Z", \
+                                "last_reported_at": "2014-02-03T22:39:28.912Z", \
+                                "created_at": "2014-01-31T01:32:54.000Z", \
+                                "ip_address": "189.173.23.133", \
+                                "version": "1.0.8", \
+                                "status": "active", \
+                                "name": "precise64", \
+                                "description": "", \
+                                "hostname": "webserver-2", \
+                                "agent_id": "524c4a59a086e11959000009-6cc8d9b0-8a17-11e3-a2e3-ffced68b988625dda8300db4f718", \
+                                "id": "52eafd46e5777f3a26000008", \
+                                "policy_id": "524c4b9aa086e1195900000d", \
+                                "organization_id": "524c4a59a086e11959000002" \
+                            }, \
+                            { \
+                                "activated_at": "2014-01-31T14:36:24.359Z", \
+                                "pause": false, \
+                                "online": true, \
+                                "enabled": true, \
+                                "updated_at": "2014-01-31T01:32:54.000Z", \
+                                "last_reported_at": "2014-02-03T22:39:28.912Z", \
+                                "created_at": "2014-01-31T01:32:54.000Z", \
+                                "ip_address": "189.173.23.134", \
+                                "version": "1.0.8", \
+                                "status": "active", \
+                                "name": "precise64", \
+                                "description": "", \
+                                "hostname": "webserver-2", \
+                                "agent_id": "524c4a59a086e11959000009-6cc8d9b0-8a17-11e3-a2e3-ffced68b988625dda8300db4f719", \
+                                "id": "52eafd46e5777f3a26000009", \
+                                "policy_id": "524c4b9aa086e1195900000d", \
+                                "organization_id": "524c4a59a086e11959000002" \
+                            } \
+                         ]'
+                  )
 
     ts = ThreatStack("test_api_key")
     response = ts.agents.list(page=1)
@@ -66,30 +65,30 @@ def test_list_agents():
 
 
 
-@httpretty.activate
+@responses.activate
 def test_get_agent():
-    httpretty.register_uri(httpretty.GET, "https://app.threatstack.com/api/v1/agents/52eafd46e5777f3a26000009",
-                           content_type="application/json",
-                          body='{ \
-                                    "activated_at": "2014-01-31T14:36:24.359Z", \
-                                    "pause": false, \
-                                    "online": true, \
-                                    "enabled": true, \
-                                    "updated_at": "2014-01-31T01:32:54.000Z", \
-                                    "last_reported_at": "2014-02-03T22:39:28.912Z", \
-                                    "created_at": "2014-01-31T01:32:54.000Z", \
-                                    "ip_address": "189.173.23.134", \
-                                    "version": "1.0.8", \
-                                    "status": "active", \
-                                    "name": "precise64", \
-                                    "description": "", \
-                                    "hostname": "webserver-2", \
-                                    "agent_id": "524c4a59a086e11959000009-6cc8d9b0-8a17-11e3-a2e3-ffced68b988625dda8300db4f719", \
-                                    "id": "52eafd46e5777f3a26000009", \
-                                    "policy_id": "524c4b9aa086e1195900000d", \
-                                    "organization_id": "524c4a59a086e11959000002" \
-                                }'
-                          )
+    responses.add(responses.GET, "https://app.threatstack.com/api/v1/agents/52eafd46e5777f3a26000009",
+                  content_type="application/json",
+                  body='{ \
+                            "activated_at": "2014-01-31T14:36:24.359Z", \
+                            "pause": false, \
+                            "online": true, \
+                            "enabled": true, \
+                            "updated_at": "2014-01-31T01:32:54.000Z", \
+                            "last_reported_at": "2014-02-03T22:39:28.912Z", \
+                            "created_at": "2014-01-31T01:32:54.000Z", \
+                            "ip_address": "189.173.23.134", \
+                            "version": "1.0.8", \
+                            "status": "active", \
+                            "name": "precise64", \
+                            "description": "", \
+                            "hostname": "webserver-2", \
+                            "agent_id": "524c4a59a086e11959000009-6cc8d9b0-8a17-11e3-a2e3-ffced68b988625dda8300db4f719", \
+                            "id": "52eafd46e5777f3a26000009", \
+                            "policy_id": "524c4b9aa086e1195900000d", \
+                            "organization_id": "524c4a59a086e11959000002" \
+                        }'
+                  )
 
     ts = ThreatStack("test_api_key")
     response = ts.agents.get("52eafd46e5777f3a26000009")
