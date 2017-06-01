@@ -6,12 +6,12 @@ import json
 from retrying import retry
 from requests import Request, Session
 try:
-    from urllib.parse import urlparse # Python 3
+    from urllib.parse import urljoin # Python 3
 except ImportError:
-     from urlparse import urlparse # Python 2
+     from urlparse import urljoin # Python 2
 
-from threatstack import resources
-from threatstack import errors
+from . import resources
+from . import errors
 
 
 def retry_on_429(exc):
