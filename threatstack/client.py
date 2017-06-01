@@ -10,8 +10,8 @@ try:
 except ImportError:
      from urlparse import urlparse # Python 2
 
-from . import resources
-from . import errors
+from threatstack import resources
+from threatstack import errors
 
 
 def retry_on_429(exc):

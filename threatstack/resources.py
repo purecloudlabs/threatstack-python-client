@@ -2,7 +2,7 @@
 Wrappers for the various ThreatStack resources.
 """
 
-from .errors import ThreatStackClientError
+from threatstack.errors import ThreatStackClientError
 
 
 class Resource(object):
