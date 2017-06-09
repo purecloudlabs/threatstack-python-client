@@ -38,6 +38,7 @@ class ThreatStack(object):
 
         self.api_key = api_key
         self.org_id = org_id
+        self.timeout = timeout
         self.agents = resources.Agents(self)
         self.alerts = resources.Alerts(self)
         self.logs = resources.Logs(self)
@@ -72,7 +73,7 @@ class ThreatStack(object):
             params=params
         )
         prepped = req.prepare()
-        resp = s.send(prepped, timeout=self.TIMEOUT)
+        resp = s.send(prepped, timeout=self.timeout)
         if resp.status_code == 429:
             raise errors.APIRateLimitError("Threat Stack API rate limit exceeded")
         else:
