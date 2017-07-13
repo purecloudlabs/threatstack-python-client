@@ -13,9 +13,13 @@ class Resource(object):
         self.client = client
         self.name = self.__class__.__name__.lower()
 
-    def get(self, id):
+    def get(self, id, fields=[]):
         path = "{}/{}".format(self.name, id)
-        resp = self.client.http_request("GET", path)
+        params = {}
+        if fields:
+            params["fields"] = fields
+
+        resp = self.client.http_request("GET", path, params=params)
         return resp
 
     def list(self, page=None, count=None, start=None, end=None, fields=[]):
