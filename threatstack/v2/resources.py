@@ -1,7 +1,6 @@
 """
 Wrappers for the various ThreatStack resources.
 """
-from functools import partialmethod
 
 from threatstack.errors import ThreatStackClientError
 
