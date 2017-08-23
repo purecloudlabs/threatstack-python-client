@@ -10,9 +10,16 @@ from threatstack import (
 def test_missing_api_key():
 
     with pytest.raises(ThreatStackClientError) as ex:
-        ts = ThreatStack(api_version=1)
+        ts = ThreatStack(api_version=2)
 
         assert 'api_key is required' in str(ex.value)
+
+def test_missing_org_id():
+
+    with pytest.raises(ThreatStackClientError) as ex:
+        ts = ThreatStack(api_version=2, api_key="test_api_key")
+
+        assert 'org_id is required' in str(ex.value)
 
 def test_bad_api_version():
 
