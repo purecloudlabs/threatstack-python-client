@@ -18,8 +18,6 @@ def retry_on_429(exc):
 class BaseClient(object):
     """ """
 
-    BASE_URL = "https://app.threatstack.com/api/"
-    TIMEOUT = 120
     RETRY_OPTS = {
         "wait_exponential_multiplier": 1000,
         "wait_exponential_max": 10000,
@@ -27,11 +25,9 @@ class BaseClient(object):
         "retry_on_exception": retry_on_429
     }
 
-    def __init__(self, api_version=None, api_key=None, timeout=120):
-        self.api_version = str(api_version)
+    def __init__(self, api_key=None, timeout=120):
         self.api_key = api_key
         self.timeout = timeout
-        self.url = urljoin(self.BASE_URL, "v{}".format(self.api_version))
 
     @property
     def api_key(self):

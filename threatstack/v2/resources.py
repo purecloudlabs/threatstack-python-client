@@ -1,6 +1,7 @@
 """
 Wrappers for the various ThreatStack resources.
 """
+from functools import partialmethod
 
 from threatstack.errors import ThreatStackClientError
 
@@ -22,72 +23,42 @@ class Resource(object):
         resp = self.client.http_request("GET", path, params=params)
         return resp
 
-    def list(self, page=None, count=None, start=None, end=None, fields=[]):
+    def list(self, path_extra=None, start=None, end=None, token=None, **kwargs):
+        """
+        This function supports query string filters used by
+        the Threat Stack API by accepting arbitrary **kwargs
+        and adding them to the requests params argument.  Given
+        the variety of query strings among the resources I wanted
+        to keep this function generic.
+        """
+        if path_extra:
+            path = "{}/{}".format(self.name, path_extra)
+        else:
+            path = self.name
+
         params = {}
-        if count:
-            params["count"] = count
+        token = True # assume all lists will support pagination
+
+        for k,v in kwargs.items():
+            params[k] = v
         if start:
-            params["start"] = start
+            params["from"] = start
         if end:
-            params["end"] = end
-        if fields:
-            params["fields"] = fields
+            params["until"] = end
 
-        # if pagination is not supported
-        if not self.paginated:
-            resp = self.client.http_request("GET", self.name, params=params)
-            for item in resp:
-                yield item
-
-        # if user wants a specific page
-        elif page is not None:
-            params["page"] = page
-            resp = self.client.http_request("GET", self.name, params=params)
+        while token:
+            resp = self.client.http_request("GET", path, params=params)
             if resp:
-                for item in resp:
-                    yield item
-
-        elif self.paginated:
-            page = 0
-            params["count"] = 100 # minimize api calls
-            while True:
-                this_page = page
-                params["page"] = this_page
-                resp = self.client.http_request("GET", self.name, params=params)
-                if resp:
-                    for i in resp:
-                        yield i
-                    page += 1
-                else:
-                    break
-
+                token = resp["token"]
+                params["token"]  = token
+                items = resp[self.name]
+                for i in items:
+                    yield i
 
 class Agents(Resource):
-    pass
+    def offline(self, path_extra="offline", **kwargs):
+        return super(Agents, self).list(path_extra="offline", **kwargs)
 
 
 class Alerts(Resource):
     pass
-
-
-class Logs(Resource):
-    def get(self, *args, **kwargs):
-        raise ThreatStackClientError("API method not supported")
-
-
-class Organizations(Resource):
-    paginated = False
-
-    def get(self, *args, **kwargs):
-        raise ThreatStackClientError("API method not supported")
-
-    def users(self, id):
-        path = "{}/{}/users".format(self.name, id)
-        resp = self.client.http_request("GET", path)
-        if resp:
-            for user in resp:
-                yield user
-
-
-class Policies(Resource):
-    paginated = False

@@ -5,14 +5,18 @@ v2 Client
 from threatstack.errors import ThreatStackClientError
 from threatstack.base import BaseClient
 
-from . import resources
+from threatstack.v2 import resources
 
 class Client(BaseClient):
+
+    BASE_URL = "https://api.threatstack.com/v2/"
+
     def __init__(self, api_key=None, org_id=None, timeout=None):
-        BaseClient.__init__(self, api_version=2, api_key=api_key, timeout=timeout)
+        BaseClient.__init__(self, api_key=api_key, timeout=timeout)
         self.org_id = org_id
-        self.agents = resources.Agents(self)
         self.org_id_header = "Organization-Id"
+        self.agents = resources.Agents(self)
+        self.alerts= resources.Alerts(self)
 
     @property
     def org_id(self):
