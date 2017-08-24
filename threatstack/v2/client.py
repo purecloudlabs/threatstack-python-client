@@ -16,7 +16,8 @@ class Client(BaseClient):
         self.org_id = org_id
         self.org_id_header = "Organization-Id"
         self.agents = resources.Agents(self)
-        self.alerts= resources.Alerts(self)
+        self.alerts = resources.Alerts(self)
+        self.vulnerabilities= resources.Vulnerabilities(self)
 
     @property
     def org_id(self):

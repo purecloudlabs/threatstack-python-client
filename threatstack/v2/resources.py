@@ -22,14 +22,26 @@ class Resource(object):
         resp = self.client.http_request("GET", path, params=params)
         return resp
 
-    def list(self, path_extra=None, start=None, end=None, token=None, **kwargs):
+    def list(self, key=None, path_extra=None, start=None, end=None, **kwargs):
         """
         This function supports query string filters used by
         the Threat Stack API by accepting arbitrary **kwargs
         and adding them to the requests params argument.  Given
         the variety of query strings among the resources I wanted
         to keep this function generic.
+
+        :param key: used when the resource class name does not match
+                    the JSON key in the HTTP response
+        :param path_extra: used to append a string to the URI path
+        :param start: maps to the `from` parameter for time ranges
+        :param end: maps to the `until` parameter for time ranges
+        :param kwargs: used to add additional item to querystring
+
+        :return: a generator object to iterate over the results
         """
+        if not key:
+            key = self.name
+
         if path_extra:
             path = "{}/{}".format(self.name, path_extra)
         else:
@@ -48,16 +60,56 @@ class Resource(object):
         while token:
             resp = self.client.http_request("GET", path, params=params)
             if resp:
-                token = resp["token"]
+                token = resp.get("token", None)
                 params["token"]  = token
-                items = resp[self.name]
+                items = resp[key]
                 for i in items:
                     yield i
+            else:
+                return
 
 class Agents(Resource):
-    def offline(self, path_extra="offline", **kwargs):
-        return super(Agents, self).list(path_extra="offline", **kwargs)
+    def list(self, offline=False, **kwargs):
+        path_extra = "offline" if offline else None
+        return super(Agents, self).list(path_extra=path_extra, **kwargs)
 
 
 class Alerts(Resource):
-    pass
+    def list(self, dismissed=False, **kwargs):
+        path_extra = "dismissed" if dismissed else None
+        return super(Alerts, self).list(path_extra=path_extra, **kwargs)
+
+    def severity_counts(self, **kwargs):
+        """
+        Return a list of the severity counts
+        """
+        path = "alerts/severity-counts"
+        resp = self.client.http_request("GET", path)
+        return resp.get("severityCounts", [])
+
+    def event(self, alert="", event="", **kwargs):
+        path = "{}/{}/events/{}".format(self.name, alert_id, event_id)
+        resp = self.client.http_request("GET", path)
+        return resp
+
+
+class Vulnerabilities(Resource):
+    def list(self, supressed=False, package=None, server=None, agent=None, **kwargs):
+        path_extra = ""
+        key = "cves"
+
+        if package:
+            key="packages"
+            path_extra += "package/{}".format(package)
+        elif server:
+            path_extra += "server/{}".format(server)
+        elif agent:
+            path_extra += "agent/{}".format(agent)
+        if supressed:
+            if path_extra:
+                path_extra += "/suppressed"
+            else:
+                path_extra += "suppressed"
+
+        return super(Vulnerabilities, self).list(key=key, path_extra=path_extra, **kwargs)
+

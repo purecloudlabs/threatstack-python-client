@@ -67,9 +67,6 @@ class BaseClient(object):
         # ThreatStack can return various things
         # when it fails to find a resource so trying
         # to give raise a consistent error
-        if not resp.json():
-            return {}
-
         if resp.status_code >= 500:
             if "status" in resp.json():
                 c = resp.json()
@@ -77,8 +74,10 @@ class BaseClient(object):
                     error = c["message"]
                     raise errors.ThreatStackAPIError(error)
 
-        if resp.status_code == 404:
+        elif resp.status_code == 404:
             return {}
 
         if resp.status_code <= 202:
+            if not resp.json():
+                return {}
             return resp.json()
