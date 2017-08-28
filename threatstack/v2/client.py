@@ -18,6 +18,8 @@ class Client(BaseClient):
         self.agents = resources.Agents(self)
         self.alerts = resources.Alerts(self)
         self.vulnerabilities= resources.Vulnerabilities(self)
+        self.rulesets = resources.Rulesets(self)
+        self.servers = resources.Servers(self)
 
     @property
     def org_id(self):

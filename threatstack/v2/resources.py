@@ -87,14 +87,14 @@ class Alerts(Resource):
         resp = self.client.http_request("GET", path)
         return resp.get("severityCounts", [])
 
-    def event(self, alert="", event="", **kwargs):
+    def event(self, alert_id="", event_id="", **kwargs):
         path = "{}/{}/events/{}".format(self.name, alert_id, event_id)
         resp = self.client.http_request("GET", path)
         return resp
 
 
 class Vulnerabilities(Resource):
-    def list(self, supressed=False, package=None, server=None, agent=None, **kwargs):
+    def list(self, suppressed=False, package=None, server=None, agent=None, **kwargs):
         path_extra = ""
         key = "cves"
 
@@ -105,11 +105,29 @@ class Vulnerabilities(Resource):
             path_extra += "server/{}".format(server)
         elif agent:
             path_extra += "agent/{}".format(agent)
-        if supressed:
+        if suppressed:
             if path_extra:
                 path_extra += "/suppressed"
             else:
                 path_extra += "suppressed"
-
         return super(Vulnerabilities, self).list(key=key, path_extra=path_extra, **kwargs)
+
+
+class Rulesets(Resource):
+    def rules(self, ruleset_id=None, rule_id=None, **kwargs):
+        """Return a single rule if caller specified a rule_id,
+        othewise return list of rules for the ruleset."""
+        if rule_id:
+            path = "rulesets/{}/rules/{}".format(ruleset_id, rule_id)
+            resp = self.client.http_request("GET", path)
+            return resp
+        else:
+            path_extra = "{}/rules".format(ruleset_id)
+            return super(Rulesets, self).list(key="rules", path_extra=path_extra, **kwargs)
+
+
+class Servers(Resource):
+    def list(self, non_monitored=False, **kwargs):
+        path_extra = "non-monitored" if non_monitored else None
+        return super(Servers, self).list(path_extra=path_extra, **kwargs)
 
