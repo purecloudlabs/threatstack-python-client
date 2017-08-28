@@ -64,7 +64,6 @@ class BaseClient(object):
             return self.handle_response(resp)
 
     def handle_response(self, resp):
-        print(vars(resp))
         # ThreatStack can return various things
         # when it fails to find a resource so trying
         # to give raise a consistent error
