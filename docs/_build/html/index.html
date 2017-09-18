@@ -6,7 +6,7 @@
   <head>
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     
-    <title>Welcome to Threat Stack Python Client’s documentation! &#8212; Threat Stack Python Client 1.0.1 documentation</title>
+    <title>Welcome to Threat Stack Python Client’s documentation! &#8212; Threat Stack Python Client 1.0.4 documentation</title>
     
     <link rel="stylesheet" href="_static/alabaster.css" type="text/css" />
     <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
@@ -14,7 +14,7 @@
     <script type="text/javascript">
       var DOCUMENTATION_OPTIONS = {
         URL_ROOT:    './',
-        VERSION:     '1.0.1',
+        VERSION:     '1.0.4',
         COLLAPSE_INDEX: false,
         FILE_SUFFIX: '.html',
         HAS_SOURCE:  true,
@@ -26,6 +26,7 @@
     <script type="text/javascript" src="_static/doctools.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="V1 Client Documentation" href="v1/index.html" />
    
   <link rel="stylesheet" href="_static/custom.css" type="text/css" />
   
@@ -45,6 +46,10 @@
 <h1>Welcome to Threat Stack Python Client’s documentation!<a class="headerlink" href="#welcome-to-threat-stack-python-client-s-documentation" title="Permalink to this headline">¶</a></h1>
 <p>The Threat Stack Python Client is a library which allows Python developers to write software that makes use of Threat Stack REST API.</p>
 <div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="v1/index.html">V1 Client Documentation</a></li>
+</ul>
 </div>
 <div class="section" id="installation">
 <h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">¶</a></h2>
@@ -58,154 +63,149 @@
 <div class="section" id="resource-types">
 <h3>Resource Types<a class="headerlink" href="#resource-types" title="Permalink to this headline">¶</a></h3>
 <ul class="simple">
-<li>Agents</li>
-<li>Alerts</li>
-<li>Logs</li>
-<li>Organizations</li>
-<li>Policies</li>
+<li>agents</li>
+<li>alerts</li>
+<li>cve vulnerabilities</li>
+<li>rulesets and rules</li>
+<li>servers</li>
 </ul>
-<p>For details on each resource please refer to the <a class="reference external" href="https://app.threatstack.com/api/docs/">Threat Stack API documentation</a>.</p>
+<p>For details on each resource please refer to the <a class="reference external" href="https://apidocs.threatstack.com/v2/v2-documentation">Threat Stack API documentation</a>.</p>
 </div>
 <div class="section" id="create-a-new-client">
 <h3>Create a new client<a class="headerlink" href="#create-a-new-client" title="Permalink to this headline">¶</a></h3>
 <p>Import and create a new Threat Stack client:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">threatstack</span> <span class="k">import</span> <span class="n">ThreatStack</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">ThreatStack</span><span class="p">(</span><span class="s2">&quot;&lt;API_KEY&gt;&quot;</span><span class="p">)</span>
+<span class="n">client</span> <span class="o">=</span> <span class="n">ThreatStack</span><span class="p">(</span><span class="n">api_key</span><span class="o">=</span><span class="s2">&quot;&lt;API_KEY&gt;&quot;</span><span class="p">,</span> <span class="n">org_id</span><span class="o">=</span><span class="s2">&quot;&lt;ORG_ID&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 <p>Additional <em>optional</em> parameters can be specified when creating a new client object:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># default api_version: 1</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># default api_version: 2</span>
 <span class="c1"># default http request timeout = 120</span>
 
 <span class="n">client</span> <span class="o">=</span> <span class="n">ThreatStack</span><span class="p">(</span>
     <span class="n">api_key</span><span class="o">=&lt;</span><span class="s2">&quot;API_KEY&gt;&quot;</span><span class="p">,</span>
     <span class="n">org_id</span><span class="o">=</span><span class="s2">&quot;&lt;ORG_ID&gt;&quot;</span><span class="p">,</span>
-    <span class="n">api_version</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
-    <span class="n">timeout</span><span class="o">=</span><span class="mi">120</span>
+    <span class="n">api_version</span><span class="o">=</span><span class="p">[</span><span class="mi">1</span> <span class="ow">or</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="n">timeout</span><span class="o">=&lt;</span><span class="n">SECONDS</span><span class="o">&gt;</span>
 <span class="p">)</span>
 </pre></div>
 </div>
+<p>See ‘V1 Client Documentation’ for using the V1 ThreatStack API Client.</p>
 </div>
-<div class="section" id="listing-resources">
-<h3>Listing Resources<a class="headerlink" href="#listing-resources" title="Permalink to this headline">¶</a></h3>
-<p>All resource types support a <em>list</em> method which returns a generator.  The generator can be used to iterate over the results.  NOTE: The <em>list</em> method uses the default time range for the resouce (see Time Ranges below).</p>
+<div class="section" id="time-ranges">
+<h3>Time Ranges<a class="headerlink" href="#time-ranges" title="Permalink to this headline">¶</a></h3>
+<p>Time ranges can be specified when listing resources using the <cite>start</cite> and <cite>end</cite> parameters:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
+<span class="n">one_hour_ago</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">one_hour_ago</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">now</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">alert</span> <span class="ow">in</span> <span class="n">alerts</span><span class="p">:</span>
+    <span class="n">details</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alert</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="agents">
+<h3>Agents<a class="headerlink" href="#agents" title="Permalink to this headline">¶</a></h3>
 <p>Listing Agents:</p>
 <div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">agents</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 
 <span class="c1"># iterate over results</span>
 <span class="k">for</span> <span class="n">agent</span> <span class="ow">in</span> <span class="n">agents</span><span class="p">:</span>
     <span class="nb">print</span> <span class="n">agent</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">]</span>
+
+<span class="c1"># query parameters</span>
+<span class="n">agents</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="nb">type</span><span class="o">=&lt;</span><span class="s2">&quot;monitor&quot;</span> <span class="ow">or</span> <span class="s2">&quot;investigate&quot;</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">hostname</span><span class="o">=&lt;</span><span class="s2">&quot;hostname&quot;</span><span class="o">&gt;</span><span class="p">,</span> <span class="n">instanceId</span><span class="o">=</span><span class="s2">&quot;&lt;instanceId&quot;</span><span class="o">&gt;</span><span class="p">)</span>
 </pre></div>
 </div>
+<p>Offline Agents:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">By</span> <span class="n">default</span> <span class="n">only</span> <span class="n">online</span> <span class="n">agents</span> <span class="n">will</span> <span class="n">be</span> <span class="n">listed</span><span class="o">.</span> <span class="n">To</span> <span class="n">get</span> <span class="n">offline</span> <span class="n">agents</span> <span class="nb">set</span> <span class="n">offline</span> <span class="n">to</span> <span class="kc">True</span><span class="o">.</span>
+
+<span class="n">offline_agents</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">offline</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get agent by ID:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">agent</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;agent_id&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="alerts">
+<h3>Alerts<a class="headerlink" href="#alerts" title="Permalink to this headline">¶</a></h3>
 <p>Listing Alerts:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">severity</span><span class="o">=</span><span class="s2">&quot;&lt;severity&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Listing Logs:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">logs</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">logs</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<p>Get Alert by ID:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alert</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;alert_id&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Listing Organizations:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">orgs</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">organizations</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<p>List all dismissed alerts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">dismissed</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">dismissed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Listing Policies:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">policies</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">policies</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+<p>Get severity counts for alerts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">sev_counts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">severity_counts</span><span class="p">()</span>
 </pre></div>
 </div>
-<p><strong>Time Ranges</strong></p>
-<p>Each resource type has a default date/time range that is applied by the Threat Stack API when listing items.  Please refer to the <a class="reference external" href="https://app.threatstack.com/api/docs/">Threat Stack API documentation</a> for additional information on these default date/time ranges.  To specify a date/time range other than the default, the <strong>start</strong> and <strong>end</strong> parameters can be used.</p>
-<p>Using a date range:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="s2">&quot;2017-05-01&quot;</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2017-05-31&quot;</span><span class="p">)</span>
+<p>Get an event for an alerts:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">event</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">event</span><span class="p">(</span><span class="n">alert_id</span><span class="o">=</span><span class="s2">&quot;&lt;alert_id&gt;&quot;</span><span class="p">,</span> <span class="n">event_id</span><span class="o">=</span><span class="s2">&quot;&lt;event_id&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p>Using a date and time range:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">(</span>
-    <span class="n">start</span><span class="o">=</span><span class="s2">&quot;2017-05-01 08:00:00&quot;</span><span class="p">,</span>
-    <span class="n">end</span><span class="o">=</span><span class="s2">&quot;2017-05-01 09:00:00&quot;</span>
-<span class="p">)</span>
-</pre></div>
 </div>
-<p>Using <em>datetime</em>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
+<div class="section" id="cve-vulnerabilities">
+<h3>CVE Vulnerabilities<a class="headerlink" href="#cve-vulnerabilities" title="Permalink to this headline">¶</a></h3>
+<p>List all vulnerabilities:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vulns</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">vulnerabilities</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 
-<span class="n">end</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-<span class="n">start</span> <span class="o">=</span> <span class="n">end</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-<span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">start</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">end</span><span class="p">)</span>
+<span class="c1"># query parameters</span>
+<span class="n">vulns</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">vulnerabilities</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">package</span><span class="o">=</span><span class="s2">&quot;&lt;package_name&gt;&quot;</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s2">&quot;&lt;instanceId/hostname&gt;&quot;</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="s2">&quot;&lt;agentId&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
-<p><strong>Pagination</strong></p>
-<p>The Agents, Alerts, and Logs resource types support pagination.  This allows you to control the page and count values when retrieving a list of items.  Please refer to the <a class="reference external" href="https://app.threatstack.com/api/docs/">Threat Stack API documentation</a> for additional information on pagination.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="c1"># default page: 0</span>
-<span class="c1"># default count: 20</span>
+<p>Get a vulnerability by CVE number:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">cve</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">vulnerabilities</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;cve_number&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>List all suppressed vulnerabilities:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">vulns</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">vulnerabilties</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">suppressed</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
 
-<span class="n">agents</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">page</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">count</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
-</pre></div>
-</div>
-<p><strong>Field Filters</strong></p>
-<p>When listing resources you can limit the fields that are returned from the ThreatStack API for each resource.  Please refer to the <a class="reference external" href="https://app.threatstack.com/api/docs/">Threat Stack API documentation</a> for additional information on partial responses.</p>
-<p>Only retrieve agent hostname and IP address:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">agents</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;hostname&quot;</span><span class="p">,</span> <span class="s2">&quot;ip_address&quot;</span><span class="p">])</span>
+<span class="c1"># same query params can be used as with list</span>
+<span class="n">vulns</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">vulnerabilities</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">suppressed</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">package</span><span class="o">=</span><span class="s2">&quot;&lt;package_name&gt;&quot;</span><span class="p">,</span> <span class="n">server</span><span class="o">=</span><span class="s2">&quot;&lt;instanceId/hostname&gt;&quot;</span><span class="p">,</span> <span class="n">agent</span><span class="o">=</span><span class="s2">&quot;&lt;agentId&gt;&quot;</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
-<div class="section" id="getting-a-specific-resource">
-<h3>Getting a Specific Resource<a class="headerlink" href="#getting-a-specific-resource" title="Permalink to this headline">¶</a></h3>
-<p>All resource types other than Logs and Organizations support the <em>get</em> method.  This method allows you to retrieve details about a specific resource given its unique identifier.  The <em>get</em> method returns a Python dict.</p>
-<p>Getting an Agent:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">agent</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;AGENT_ID&gt;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Getting an Alert:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">alert</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;ALERT_ID&gt;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>Getting a Policy:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">policy</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">policy</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;POLICY_ID&gt;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-<p>If the resource is <strong>not found</strong> by the ThreatStack API, and empty dict is returned from the client.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">agent</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">agents</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;AGENT_ID&quot;</span><span class="o">&gt;</span><span class="p">)</span>
-<span class="k">if</span> <span class="n">agent</span><span class="p">:</span>
-    <span class="nb">print</span> <span class="n">agent</span>
-<span class="k">else</span><span class="p">:</span>
-    <span class="nb">print</span> <span class="s2">&quot;Agent not found&quot;</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="additional-methods">
-<h2>Additional Methods<a class="headerlink" href="#additional-methods" title="Permalink to this headline">¶</a></h2>
-<div class="section" id="organizations">
-<h3>Organizations<a class="headerlink" href="#organizations" title="Permalink to this headline">¶</a></h3>
-<p>The Organizations resource has a <em>users</em> method which returns a list of users for a given organization.</p>
-<p>Get users for an Organization:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">users</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">organization</span><span class="o">.</span><span class="n">users</span><span class="p">(</span><span class="s2">&quot;&lt;org_id&gt;&quot;</span><span class="p">)</span>
-</pre></div>
-</div>
-</div>
-</div>
-<div class="section" id="additional-examples">
-<h2>Additional Examples<a class="headerlink" href="#additional-examples" title="Permalink to this headline">¶</a></h2>
-<p>Retrieve list of alert ID’s from the last hour and then get details for each alert:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">datetime</span> <span class="k">import</span> <span class="n">datetime</span><span class="p">,</span> <span class="n">timedelta</span>
-<span class="kn">from</span> <span class="nn">threatstack</span> <span class="k">import</span> <span class="n">ThreatStack</span><span class="p">,</span> <span class="n">ThreatStackAPIError</span>
+<div class="section" id="rulesets-rules">
+<h3>Rulesets &amp; Rules<a class="headerlink" href="#rulesets-rules" title="Permalink to this headline">¶</a></h3>
+<p>List all rulesets:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rulesets</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">rulesets</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
 
-<span class="n">client</span> <span class="o">=</span> <span class="n">ThreatStack</span><span class="p">(</span><span class="s2">&quot;&lt;API_KEY&gt;&quot;</span><span class="p">)</span>
-
-<span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span>
-<span class="n">one_hour_ago</span> <span class="o">=</span> <span class="n">now</span> <span class="o">-</span> <span class="n">timedelta</span><span class="p">(</span><span class="n">hours</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="k">try</span><span class="p">:</span>
-    <span class="n">alerts</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">start</span><span class="o">=</span><span class="n">one_hour_ago</span><span class="p">,</span> <span class="n">end</span><span class="o">=</span><span class="n">now</span><span class="p">,</span> <span class="n">fields</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
-
-    <span class="k">for</span> <span class="n">alert</span> <span class="ow">in</span> <span class="n">alerts</span><span class="p">:</span>
-        <span class="n">details</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">alerts</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">alert</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">])</span>
-
-<span class="k">except</span> <span class="n">ThreatStackAPIError</span><span class="p">:</span>
-    <span class="nb">print</span> <span class="s2">&quot;The ThreatStack API returned an error response.&quot;</span>
+<span class="c1"># query parameters</span>
+<span class="n">rulesets</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">rulesets</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">agentId</span><span class="o">=</span><span class="s2">&quot;&lt;agent_id&gt;&quot;</span><span class="p">)</span>
 </pre></div>
+</div>
+<p>Get a ruleset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">ruleset</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ruleset</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;&lt;ruleset_id&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get all rules for a ruleset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rules</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ruleset</span><span class="o">.</span><span class="n">rules</span><span class="p">(</span><span class="n">ruleset_id</span><span class="o">=</span><span class="s2">&quot;&lt;ruleset_id&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Get a rule for a ruleset:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">rule</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">ruleset</span><span class="o">.</span><span class="n">rules</span><span class="p">(</span><span class="n">ruleset_id</span><span class="o">=</span><span class="s2">&quot;&lt;ruleset_id&gt;&quot;</span><span class="p">,</span> <span class="n">rule_id</span><span class="o">=</span><span class="s2">&quot;&lt;rule_id&gt;&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="servers">
+<h3>Servers<a class="headerlink" href="#servers" title="Permalink to this headline">¶</a></h3>
+<p>Get all servers:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">servers</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">list</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>Get all non-monitored servers:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">non_monitored</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">servers</span><span class="o">.</span><span class="n">list</span><span class="p">(</span><span class="n">non_monitored</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+</pre></div>
+</div>
 </div>
 </div>
 </div>
@@ -223,15 +223,14 @@
 <li><a class="reference internal" href="#usage">Usage</a><ul>
 <li><a class="reference internal" href="#resource-types">Resource Types</a></li>
 <li><a class="reference internal" href="#create-a-new-client">Create a new client</a></li>
-<li><a class="reference internal" href="#listing-resources">Listing Resources</a></li>
-<li><a class="reference internal" href="#getting-a-specific-resource">Getting a Specific Resource</a></li>
+<li><a class="reference internal" href="#time-ranges">Time Ranges</a></li>
+<li><a class="reference internal" href="#agents">Agents</a></li>
+<li><a class="reference internal" href="#alerts">Alerts</a></li>
+<li><a class="reference internal" href="#cve-vulnerabilities">CVE Vulnerabilities</a></li>
+<li><a class="reference internal" href="#rulesets-rules">Rulesets &amp; Rules</a></li>
+<li><a class="reference internal" href="#servers">Servers</a></li>
 </ul>
 </li>
-<li><a class="reference internal" href="#additional-methods">Additional Methods</a><ul>
-<li><a class="reference internal" href="#organizations">Organizations</a></li>
-</ul>
-</li>
-<li><a class="reference internal" href="#additional-examples">Additional Examples</a></li>
 </ul>
 </li>
 </ul>
@@ -239,6 +238,7 @@
 <h3>Related Topics</h3>
 <ul>
   <li><a href="#">Documentation overview</a><ul>
+      <li>Next: <a href="v1/index.html" title="next chapter">V1 Client Documentation</a></li>
   </ul></li>
 </ul>
 </div>
@@ -267,7 +267,7 @@
       &copy;2017, Interactive Intelligence, Inc..
       
       |
-      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.2</a>
+      Powered by <a href="http://sphinx-doc.org/">Sphinx 1.6.1</a>
       &amp; <a href="https://github.com/bitprophet/alabaster">Alabaster 0.7.10</a>
       
       |
