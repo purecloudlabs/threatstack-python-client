@@ -58,7 +58,7 @@ def test_list_logs():
                      ]'
                   )
 
-    ts = ThreatStack("test_api_key")
+    ts = ThreatStack(api_key="test_api_key", api_version=1)
     response = ts.logs.list(page=1)
     assert isinstance(response, GeneratorType)
 
@@ -71,7 +71,7 @@ def test_list_logs():
 
 def test_get_log():
     with pytest.raises(ThreatStackClientError) as ex:
-        ts = ThreatStack("test_api_key")
+        ts = ThreatStack(api_key="test_api_key", api_version=1)
         org = ts.logs.get()
 
         assert "API method not supported" in str(ex.value)

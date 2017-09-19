@@ -16,7 +16,7 @@ def test_list_organizations():
                          ]'
                   )
 
-    ts = ThreatStack("test_api_key")
+    ts = ThreatStack(api_key="test_api_key", api_version=1)
     response = ts.organizations.list()
     assert isinstance(response, GeneratorType)
 
@@ -29,7 +29,7 @@ def test_list_organizations():
 
 def test_get_organziation():
     with pytest.raises(ThreatStackClientError) as ex:
-        ts = ThreatStack("test_api_key")
+        ts = ThreatStack(api_key="test_api_key", api_version=1)
         org = ts.organizations.get()
 
         assert "API method not supported" in str(ex.value)
@@ -61,7 +61,7 @@ def test_get_organization_users():
                         ]'
                   )
 
-    ts = ThreatStack("test_api_key")
+    ts = ThreatStack(api_key="test_api_key", api_version=1)
     response = ts.organizations.users("acbd18db4cc2f85cedef654fccc4a4dG8")
     assert isinstance(response, GeneratorType)
 

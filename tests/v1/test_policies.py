@@ -46,7 +46,7 @@ def test_list_policies():
                         ]'
                     )
 
-    ts = ThreatStack("test_api_key")
+    ts = ThreatStack(api_key="test_api_key", api_version=1)
     response = ts.policies.list(page=1)
     assert isinstance(response, GeneratorType)
     count = 0
@@ -77,7 +77,7 @@ def test_get_policy():
                         }'
                   )
 
-    ts = ThreatStack("test_api_key")
+    ts = ThreatStack(api_key="test_api_key", api_version=1)
     response = ts.policies.get("524c4b9aa086e1195900000a")
     assert isinstance(response, dict)
 
