@@ -68,7 +68,7 @@ Time ranges can be specified when listing resources using the `start` and `end` 
     now = datetime.now()
     one_hour_ago = now - timedelta(hours=1)
 
-    alerts = client.alerts.list(start=one_hour_ago, end=now)
+    alerts = client.alerts.list(start=one_hour_ago.isoformat(), end=now.isoformat())
 
     for alert in alerts:
         details = client.alerts.get(alert["id"])
@@ -103,7 +103,7 @@ Alerts
 ------
 Listing Alerts::
 
-    alerts = client.alerts.list(severity="<severity>")
+    alerts = client.alerts.list(severity=<1, 2, or 3>)
 
 Get Alert by ID::
 
@@ -117,7 +117,7 @@ Get severity counts for alerts::
 
 	sev_counts = client.alerts.severity_counts()
 
-Get an event for an alerts::
+Get an event for an alert::
 
     event = client.alerts.event(alert_id="<alert_id>", event_id="<event_id>")
 
