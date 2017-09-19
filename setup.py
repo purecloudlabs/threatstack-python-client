@@ -1,6 +1,6 @@
 # Copyright (c) 2017 Interactive Intelligence, Inc.
 
-from setuptools import setup
+from setuptools import setup, find_packages
 
 install_reqs = [
     'requests[security]',
@@ -8,7 +8,7 @@ install_reqs = [
 ]
 
 setup(name='threatstack',
-      version='1.1.0',
+      version='1.1.1',
       description='A Python client for the Threat Stack API',
       license='MIT License',
       author='PureCloud Security Team',
@@ -27,5 +27,5 @@ setup(name='threatstack',
           'Programming Language :: Python',
           'Topic :: Security',
       ],
-      packages=['threatstack']
+      packages=find_packages()
 )
