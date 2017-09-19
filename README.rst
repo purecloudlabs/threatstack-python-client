@@ -24,9 +24,9 @@ Resource Types
 --------------
 - agents
 - alerts
-- logs
-- organizations
-- policies
+- vulnerabilities
+- rulesets & rules 
+- servers
 
 Installation
 ------------
@@ -41,7 +41,7 @@ Usage
 Create a new client::
 
     from threatstack import ThreatStack
-    client = ThreatStack("<API_KEY>")
+    client = ThreatStack(api_key="<API_KEY>", org_id="<ORG_ID>")
 
 List resources::
 
@@ -51,21 +51,13 @@ List resources::
     for agent in agents:
         print agent["id"]
 
-Using a date range::
-
-    alerts = client.alerts.list(start="2017-05-01", end="2017-05-31")
-
-Pagination::
-
-    agents = client.agents.list(page=2, count=10)
-
-Only retrieve agent hostname and IP address::
-
-    agents = client.agents.list(fields=["hostname", "ip_address"])
-
 Get a single resource::
 
     agent = client.agents.get("<AGENT_ID">)
+
+Using a date range::
+
+    alerts = client.alerts.list(start="2017-05-01", end="2017-05-31")
 
 
 Documentation
