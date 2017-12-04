@@ -8,12 +8,16 @@ from threatstack.errors import ThreatStackClientError
 class Resource(object):
     """ Generic wrapper for API resource """
     paginated = True
+    name = None
 
     def __init__(self, client):
         self.client = client
-        self.name = self.__class__.__name__.lower()
+        if self.name is None:
+            self.name = self.__class__.__name__.lower()
 
-    def get(self, id, fields=[]):
+    def get(self, id, fields=None):
+        if fields is None:
+            fields = []
         path = "{}/{}".format(self.name, id)
         params = {}
         if fields:
@@ -51,7 +55,8 @@ class Resource(object):
         token = True # assume all lists will support pagination
 
         for k,v in kwargs.items():
-            params[k] = v
+            if v is not None:
+                params[k] = v
         if start:
             params["from"] = start
         if end:
@@ -61,56 +66,60 @@ class Resource(object):
             resp = self.client.http_request("GET", path, params=params)
             if resp:
                 token = resp.get("token", None)
-                params["token"]  = token
+                params["token"] = token
                 items = resp[key]
                 for i in items:
                     yield i
             else:
                 return
 
+
 class Agents(Resource):
-    def list(self, offline=False, **kwargs):
-        path_extra = "offline" if offline else None
-        return super(Agents, self).list(path_extra=path_extra, **kwargs)
+    def list(self, status=None, **kwargs):
+        status = "offline" if status == "offline" else "online"
+        return super(Agents, self).list(status=status, **kwargs)
 
 
 class Alerts(Resource):
     def list(self, dismissed=False, **kwargs):
-        path_extra = "dismissed" if dismissed else None
-        return super(Alerts, self).list(path_extra=path_extra, **kwargs)
+        status = "dismissed" if dismissed else "active"
+        return super(Alerts, self).list(status=status, **kwargs)
 
-    def severity_counts(self, **kwargs):
-        """
-        Return a list of the severity counts
-        """
-        path = "alerts/severity-counts"
-        resp = self.client.http_request("GET", path)
-        return resp.get("severityCounts", [])
+    def severity_counts(self):
+        path = "{}/severity-counts".format(self.name)
+        resp = self.client.http_request("GET", path=path)
+        return resp
 
-    def event(self, alert_id="", event_id="", **kwargs):
-        path = "{}/{}/events/{}".format(self.name, alert_id, event_id)
+    def events(self, alert_id=""):
+        path = "{}/{}/events".format(self.name, alert_id)
         resp = self.client.http_request("GET", path)
         return resp
 
 
 class Vulnerabilities(Resource):
-    def list(self, suppressed=False, package=None, server=None, agent=None, **kwargs):
+    def list(self, active=None, **kwargs):
         path_extra = ""
         key = "cves"
+        return super(Vulnerabilities, self).list(key=key, path_extra=path_extra, active=active, **kwargs)
 
-        if package:
-            key="packages"
-            path_extra += "package/{}".format(package)
-        elif server:
-            path_extra += "server/{}".format(server)
-        elif agent:
-            path_extra += "agent/{}".format(agent)
-        if suppressed:
-            if path_extra:
-                path_extra += "/suppressed"
-            else:
-                path_extra += "suppressed"
-        return super(Vulnerabilities, self).list(key=key, path_extra=path_extra, **kwargs)
+    def suppressed(self, active=None):
+        params = {}
+        if active is not None:
+            params["active"] = active
+        return super(Vulnerabilities, self).list(key="suppressions", path_extra="suppressions", active=active)
+
+    def package(self, package, status=None):
+        path = "{}/package/{}".format(self.name, package)
+        params = {}
+        if status is not None:
+            params["status"] = status
+        resp = self.client.http_request("GET", path, params=params)
+        return resp
+
+    def affected_servers(self, cve):
+        path = "{}/{}/servers".format(self.name, cve)
+        resp = self.client.http_request("GET", path)
+        return resp
 
 
 class Rulesets(Resource):
@@ -125,9 +134,14 @@ class Rulesets(Resource):
             path_extra = "{}/rules".format(ruleset_id)
             return super(Rulesets, self).list(key="rules", path_extra=path_extra, **kwargs)
 
+    def agents_for_ruleset(self, agent_id):
+        path = "rulesets/{}".format(agent_id)
+        resp = self.client.http_request("GET", path, params={"agentId": agent_id})
+        return resp
 
-class Servers(Resource):
-    def list(self, non_monitored=False, **kwargs):
-        path_extra = "non-monitored" if non_monitored else None
-        return super(Servers, self).list(path_extra=path_extra, **kwargs)
+
+class Ec2Servers(Resource):
+    def list(self, monitored=None, **kwargs):
+        self.name = "aws"
+        return super(Ec2Servers, self).list(path_extra="ec2/", key="servers", monitored=monitored, **kwargs)
 

@@ -53,7 +53,7 @@ def test_list_alerts():
                  }'
               )
 
-    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id")
+    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id", user_id="test_user_id")
     response = ts.alerts.list()
     assert isinstance(response, GeneratorType)
 
@@ -87,7 +87,7 @@ def test_get_alert():
                         }'
                   )
 
-    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id")
+    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id", user_id="test_user_id")
     response = ts.alerts.get("52ebb55fdf5fb93e710002ba")
     assert isinstance(response, dict)
 
