@@ -41,7 +41,7 @@ Usage
 Create a new client::
 
     from threatstack import ThreatStack
-    client = ThreatStack(api_key="<API_KEY>", org_id="<ORG_ID>")
+    client = ThreatStack(api_key="<API_KEY>", org_id="<ORG_ID>", user_id="<USER_ID>")
 
 List resources::
 

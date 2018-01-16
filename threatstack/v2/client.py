@@ -11,9 +11,11 @@ class Client(BaseClient):
 
     BASE_URL = "https://api.threatstack.com/v2/"
 
-    def __init__(self, api_key=None, org_id=None, timeout=None):
+    def __init__(self, api_key=None, org_id=None, timeout=None, user_id=None):
         BaseClient.__init__(self, api_key=api_key, timeout=timeout)
+        self.API_VERSION = 2
         self.org_id = org_id
+        self.user_id = user_id
         self.org_id_header = "Organization-Id"
         self.agents = resources.Agents(self)
         self.alerts = resources.Alerts(self)
@@ -30,3 +32,12 @@ class Client(BaseClient):
         if not k:
             raise ThreatStackClientError("org_id is required.")
         self._org_id = k
+    @property
+    def user_id(self):
+        return self._user_id
+
+    @user_id.setter
+    def user_id(self, k):
+        if not k:
+            raise ThreatStackClientError("user_id is required.")
+        self._user_id = k

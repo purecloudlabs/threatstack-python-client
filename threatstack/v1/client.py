@@ -13,6 +13,7 @@ class Client(BaseClient):
 
     def __init__(self, api_key=None, org_id=None, timeout=None):
         BaseClient.__init__(self, api_key=api_key, timeout=timeout)
+        self.API_VERSION = 1
         self.org_id = org_id
         self.org_id_header = "Organization"
         self.agents = resources.Agents(self)
