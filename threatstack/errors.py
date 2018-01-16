@@ -11,6 +11,10 @@ class ThreatStackClientError(Exception):
     pass
 
 
+class ThreatStackClientAuthorizationError(Exception):
+    pass
+
+
 class ThreatStackAPIError(Error):
     pass
 
