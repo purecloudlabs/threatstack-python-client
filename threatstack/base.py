@@ -6,7 +6,12 @@ import json
 from retrying import retry
 from requests import Request, Session
 from six.moves.urllib.parse import urljoin
-
+try:
+    import urlparse
+    from urllib import urlencode
+except: # For Python 3
+    import urllib.parse as urlparse
+    from urllib.parse import urlencode
 from threatstack import errors
 
 
@@ -17,6 +22,9 @@ def retry_on_429(exc):
 
 class BaseClient(object):
     """ """
+    @property
+    def BASE_URL(self):
+        raise NotImplementedError
 
     RETRY_OPTS = {
         "wait_exponential_multiplier": 1000,
@@ -39,15 +47,22 @@ class BaseClient(object):
             raise errors.ThreatStackClientError("api_key is required")
         self._api_key = k
 
+    def request_headers(self, method, full_url):
+        raise NotImplementedError("Please Implement this method")
+
     @retry(**RETRY_OPTS)
     def http_request(self, method, path, data=None, params=None):
         """ Wraps HTTP calls to ThrestStack API """
 
         s = Session()
         url = urljoin(self.BASE_URL, path)
-        headers = {"Authorization": self.api_key}
-        if self.org_id:
-            headers[self.org_id_header] = self.org_id
+        full_url = url
+        try:
+            full_url = full_url + "?" + urlencode(params)
+        except:
+            pass
+
+        headers = self.request_headers(method, full_url)
 
         req = Request(
             method,

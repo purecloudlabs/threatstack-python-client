@@ -55,7 +55,7 @@ def test_v2_list_agents():
                         }'
                       )
 
-    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id", api_version=2)
+    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id", user_id="test_user_id", api_version=2)
     response = ts.agents.list()
     assert isinstance(response, GeneratorType)
 
@@ -91,7 +91,7 @@ def test_get_agent():
                         }'
                   )
 
-    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id", api_version=2)
+    ts = ThreatStack(api_key="test_api_key", org_id="test_org_id", user_id="test_user_id", api_version=2)
     response = ts.agents.get("52eafd46e5777f3a26000009")
     assert isinstance(response, dict)
 

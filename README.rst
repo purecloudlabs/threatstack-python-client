@@ -41,11 +41,11 @@ Usage
 Create a new client::
 
     from threatstack import ThreatStack
-    client = ThreatStack(api_key="<API_KEY>", org_id="<ORG_ID>")
+    client = ThreatStack(api_key="<API_KEY>", org_id="<ORG_ID>", user_id="<USER_ID>")
 
 List resources::
 
-    agents = client.agents.list()
+    agents = client.agents.list(status='online')
 
     # iterate over results
     for agent in agents:
@@ -57,7 +57,7 @@ Get a single resource::
 
 Using a date range::
 
-    alerts = client.alerts.list(start="2017-05-01", end="2017-05-31")
+    alerts = client.alerts.list(status="active", start="2017-05-01", end="2017-05-31")
 
 
 Documentation
