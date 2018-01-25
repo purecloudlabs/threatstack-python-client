@@ -3,6 +3,7 @@
 from setuptools import setup, find_packages
 
 install_reqs = [
+    'mohawk',
     'requests[security]',
     'retrying'
 ]
