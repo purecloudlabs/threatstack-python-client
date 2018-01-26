@@ -9,7 +9,7 @@ install_reqs = [
 ]
 
 setup(name='threatstack',
-      version='1.1.1',
+      version='1.2.0',
       description='A Python client for the Threat Stack API',
       license='MIT License',
       author='PureCloud Security Team',
