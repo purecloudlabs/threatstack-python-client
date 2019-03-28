@@ -51,7 +51,7 @@ class BaseClient(object):
         raise NotImplementedError("Please Implement this method")
 
     @retry(**RETRY_OPTS)
-    def http_request(self, method, path, data=None, params=None):
+    def http_request(self, method, path, data=None, params=None, content_type=None):
         """ Wraps HTTP calls to ThrestStack API """
 
         s = Session()
