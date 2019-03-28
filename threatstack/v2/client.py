@@ -42,14 +42,18 @@ class Client(BaseClient):
             raise ThreatStackClientError("user_id is required.")
         self._user_id = k
 
-    def request_headers(self, method, url):
+    def request_headers(self, method, url, data, content_type):
         credentials = {
             'id': self.user_id,
             'key': self.api_key,
             'algorithm': 'sha256'
         }
+        if method == 'POST':
+            sender = Sender(credentials, url, method, always_hash_content=False, ext=self.org_id, content=data,
+                            content_type=content_type)
+            return {'Authorization': sender.request_header, 'Content-Type': content_type}
         sender = Sender(credentials, url, method, always_hash_content=False, ext=self.org_id)
-        return { 'Authorization': sender.request_header }
+        return {'Authorization': sender.request_header}
 
     def handle_response(self, resp):
         # ThreatStack can return various things
