@@ -95,6 +95,56 @@ class Alerts(Resource):
         resp = self.client.http_request("GET", path)
         return resp
 
+    def dismiss_by_id(self, ids, dismiss_reason, dismiss_reason_text=None):
+        """
+        :param ids: A list of valid alertIds. minItems:1 maxItems: 512
+        :param dismiss_reason: The reason the alert was dismissed. Allowed Values: business_op, company_policy,
+                               maintenance, none, auto_dismiss, OTHER
+        :param dismiss_reason_text: Reason the alert was dismissed if reason is other.
+        :return:
+        """
+        path = "{}/dismiss".format(self.name)
+        data = dict()
+        data["ids"] = ids
+        data["dismissReason"] = dismiss_reason
+        if dismiss_reason_text is not None:
+            data["dismissReasonText"] = dismiss_reason_text
+        resp = self.client.http_request("POST", path, data=json.dumps(data), content_type='application/json')
+        return resp
+
+    def dismiss_by_time_range(self, alerts_from, alerts_until, dismiss_reason, severity=None, rule_id=None,
+                              agent_id=None, dismiss_reason_text=None):
+        """
+        :param alerts_from: The first date and time from which to dismiss alerts.
+                            With alerts_until forms a timeframe within which alerts will be dismissed.
+                            Format: ISO-8601 date and time
+        :param alerts_until: The last date and time from which to dismiss alerts.
+                             With alters_from, forms a timeframe within which alerts will be dismissed.
+                             Format: ISO-8601 date and time
+        :param dismiss_reason: The reason the alert was dismissed. Allowed Values: business_op, company_policy,
+                               maintenance, none, auto_dismiss, OTHER
+        :param severity: Severity level of the alert. Allowed Values: 1, 2, 3
+        :param rule_id: Unique id of the rule that generated the alert.
+        :param agent_id: Unique id of the Agent on which the alert occurred.
+        :param dismiss_reason_text: Reason the alert was dismissed if reason is other.
+        :return:
+        """
+        path = "{}/dismiss".format(self.name)
+        data = dict()
+        data["from"] = alerts_from
+        data["until"] = alerts_until
+        if severity is not None:
+            data["severity"] = severity
+        if rule_id is not None:
+            data["ruleID"] = rule_id
+        if agent_id is not None:
+            data["agentID"] = agent_id
+        data["dismissReason"] = dismiss_reason
+        if dismiss_reason_text is not None:
+            data["dismissReasonText"] = dismiss_reason_text
+        resp = self.client.http_request("POST", path, data=json.dumps(data), content_type='application/json')
+        return resp
+
 
 class Vulnerabilities(Resource):
     def list(self, active=None, **kwargs):
