@@ -47,11 +47,11 @@ class BaseClient(object):
             raise errors.ThreatStackClientError("api_key is required")
         self._api_key = k
 
-    def request_headers(self, method, full_url):
+    def request_headers(self, method, full_url, data, content_type):
         raise NotImplementedError("Please Implement this method")
 
     @retry(**RETRY_OPTS)
-    def http_request(self, method, path, data=None, params=None):
+    def http_request(self, method, path, data=None, params=None, content_type=None):
         """ Wraps HTTP calls to ThrestStack API """
 
         s = Session()
@@ -62,7 +62,7 @@ class BaseClient(object):
         except:
             pass
 
-        headers = self.request_headers(method, full_url)
+        headers = self.request_headers(method, full_url, data, content_type)
 
         req = Request(
             method,

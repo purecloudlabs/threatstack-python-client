@@ -21,7 +21,7 @@ class Client(BaseClient):
         self.organizations = resources.Organizations(self)
         self.policies = resources.Policies(self)
     
-    def request_headers(self, _method, _url):
+    def request_headers(self, _method, _url, _data, _content_type):
         headers = { "Authorization": self.api_key }
         if self.org_id:
             headers["Organization"] = self.org_id
